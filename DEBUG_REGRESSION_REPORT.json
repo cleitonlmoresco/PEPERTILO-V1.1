@@ -1,0 +1,341 @@
+{
+  "pass": 12,
+  "fail": 0,
+  "tests": [
+    {
+      "teste": "M1 classifica PDF vetorial",
+      "status": "PASS",
+      "detalhes": true
+    },
+    {
+      "teste": "M2 extrai página vetorial",
+      "status": "PASS",
+      "detalhes": true
+    },
+    {
+      "teste": "M5 junção T",
+      "status": "PASS",
+      "detalhes": {
+        "segmentos_originais": [
+          [
+            [
+              0.0,
+              0.0
+            ],
+            [
+              10.0,
+              0.0
+            ]
+          ],
+          [
+            [
+              5.0,
+              0.0
+            ],
+            [
+              5.0,
+              10.0
+            ]
+          ]
+        ],
+        "arestas": [
+          {
+            "a": [
+              0.0,
+              0.0
+            ],
+            "b": [
+              5.0,
+              0.0
+            ],
+            "segmento_origem": 0
+          },
+          {
+            "a": [
+              5.0,
+              0.0
+            ],
+            "b": [
+              10.0,
+              0.0
+            ],
+            "segmento_origem": 0
+          },
+          {
+            "a": [
+              5.0,
+              0.0
+            ],
+            "b": [
+              5.0,
+              10.0
+            ],
+            "segmento_origem": 1
+          }
+        ],
+        "intersecoes": [
+          {
+            "ponto": [
+              5.0,
+              0.0
+            ],
+            "tipo": "junção_T",
+            "conecta": true,
+            "segmentos": [
+              0,
+              1
+            ]
+          }
+        ],
+        "emendas": [],
+        "pontes": [],
+        "num_juncoes": 1,
+        "num_cruzamentos_sem_conexao": 0,
+        "num_pontes": 0
+      }
+    },
+    {
+      "teste": "M5 cruzamento sem conexão",
+      "status": "PASS",
+      "detalhes": {
+        "segmentos_originais": [
+          [
+            [
+              0.0,
+              5.0
+            ],
+            [
+              10.0,
+              5.0
+            ]
+          ],
+          [
+            [
+              5.0,
+              0.0
+            ],
+            [
+              5.0,
+              10.0
+            ]
+          ]
+        ],
+        "arestas": [
+          {
+            "a": [
+              0.0,
+              5.0
+            ],
+            "b": [
+              10.0,
+              5.0
+            ],
+            "segmento_origem": 0
+          },
+          {
+            "a": [
+              5.0,
+              0.0
+            ],
+            "b": [
+              5.0,
+              10.0
+            ],
+            "segmento_origem": 1
+          }
+        ],
+        "intersecoes": [
+          {
+            "ponto": [
+              5.0,
+              5.0
+            ],
+            "tipo": "cruzamento_sem_conexao",
+            "conecta": false,
+            "segmentos": [
+              0,
+              1
+            ]
+          }
+        ],
+        "emendas": [],
+        "pontes": [],
+        "num_juncoes": 0,
+        "num_cruzamentos_sem_conexao": 1,
+        "num_pontes": 0
+      }
+    },
+    {
+      "teste": "M5 cruzamento com junção",
+      "status": "PASS",
+      "detalhes": {
+        "segmentos_originais": [
+          [
+            [
+              0.0,
+              5.0
+            ],
+            [
+              10.0,
+              5.0
+            ]
+          ],
+          [
+            [
+              5.0,
+              0.0
+            ],
+            [
+              5.0,
+              10.0
+            ]
+          ]
+        ],
+        "arestas": [
+          {
+            "a": [
+              0.0,
+              5.0
+            ],
+            "b": [
+              5.0,
+              5.0
+            ],
+            "segmento_origem": 0
+          },
+          {
+            "a": [
+              5.0,
+              5.0
+            ],
+            "b": [
+              10.0,
+              5.0
+            ],
+            "segmento_origem": 0
+          },
+          {
+            "a": [
+              5.0,
+              0.0
+            ],
+            "b": [
+              5.0,
+              5.0
+            ],
+            "segmento_origem": 1
+          },
+          {
+            "a": [
+              5.0,
+              5.0
+            ],
+            "b": [
+              5.0,
+              10.0
+            ],
+            "segmento_origem": 1
+          }
+        ],
+        "intersecoes": [
+          {
+            "ponto": [
+              5.0,
+              5.0
+            ],
+            "tipo": "junção",
+            "conecta": true,
+            "segmentos": [
+              0,
+              1
+            ]
+          }
+        ],
+        "emendas": [
+          [
+            5.0,
+            5.0
+          ]
+        ],
+        "pontes": [],
+        "num_juncoes": 1,
+        "num_cruzamentos_sem_conexao": 0,
+        "num_pontes": 0
+      }
+    },
+    {
+      "teste": "M4 conector sem moldura",
+      "status": "PASS",
+      "detalhes": {
+        "conectores": 2,
+        "terminais": [
+          410,
+          429,
+          414,
+          416,
+          430,
+          408,
+          401,
+          417
+        ]
+      }
+    },
+    {
+      "teste": "M4→M5 terminal→segmento→rede",
+      "status": "PASS",
+      "detalhes": {
+        "pinos": [
+          34,
+          46
+        ],
+        "rede": "segmento_0",
+        "cor": "BROWN",
+        "bitola": "0.50 mm²"
+      }
+    },
+    {
+      "teste": "M4 real: contrato terminal/fio",
+      "status": "PASS",
+      "detalhes": {
+        "terminais": 8,
+        "com_segmento": 7,
+        "conectores": 2
+      }
+    },
+    {
+      "teste": "MPU PRO pin map documental",
+      "status": "PASS",
+      "detalhes": {
+        "part": "MC68HC912BC32",
+        "orientacao": "PIN1_SUPERIOR_ESQUERDO",
+        "pinos": 80
+      }
+    },
+    {
+      "teste": "M6 respeita limite_paginas",
+      "status": "PASS",
+      "detalhes": {
+        "limite1": 0,
+        "limite2": 5
+      }
+    },
+    {
+      "teste": "M11 separa fios/MCU/máscaras",
+      "status": "PASS",
+      "detalhes": {
+        "fios": 5,
+        "mcus": 2,
+        "mascaras": 2
+      }
+    },
+    {
+      "teste": "Roteador contrato de saída",
+      "status": "PASS",
+      "detalhes": {
+        "tipo": "pdf_vetorial",
+        "status": "ok",
+        "modulo": "M5"
+      }
+    }
+  ]
+}

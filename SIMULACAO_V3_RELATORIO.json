@@ -1,0 +1,166 @@
+[
+  {
+    "arquivo": "01_ECU_Delphi_MT20U.webp",
+    "m4": {
+      "textos": 33,
+      "linhas": 1108,
+      "retangulos": 0,
+      "conectores": 0
+    },
+    "mpu": {
+      "modo": "normal",
+      "part_number": null,
+      "encapsulamento": null,
+      "num_pinos": 0,
+      "programadores": []
+    },
+    "m5": {
+      "conexoes": 0,
+      "topologia": [
+        {
+          "pagina": 1,
+          "juncoes": 65,
+          "cruzamentos_sem_conexao": 21,
+          "arestas": 1076
+        }
+      ]
+    }
+  },
+  {
+    "arquivo": "02_MC68HC912BC32_pinout.png",
+    "m4": {
+      "textos": 128,
+      "linhas": 1487,
+      "retangulos": 3,
+      "conectores": 1
+    },
+    "mpu": {
+      "modo": "mpu",
+      "part_number": "MC68HC912BC32",
+      "encapsulamento": "80-pin QFP",
+      "num_pinos": 80,
+      "programadores": [
+        [
+          "CarProg_A10",
+          "documentado_para_familia"
+        ],
+        [
+          "UPA_USB",
+          "familia_cadastrada"
+        ]
+      ]
+    },
+    "m5": {
+      "conexoes": 4,
+      "topologia": [
+        {
+          "pagina": 1,
+          "juncoes": 95,
+          "cruzamentos_sem_conexao": 5,
+          "arestas": 1329
+        }
+      ]
+    }
+  },
+  {
+    "arquivo": "teste_topologia_controlada",
+    "m5": {
+      "conexoes": [
+        {
+          "pinos": [
+            1,
+            2
+          ],
+          "funcao": null,
+          "cor_fio": null,
+          "bitola": null,
+          "tipo": "rede",
+          "pagina_origem": [
+            1
+          ],
+          "status": "rede_topologica",
+          "evidencias": [
+            "geometria_topologica"
+          ]
+        }
+      ],
+      "topologia": [
+        {
+          "pagina": 1,
+          "juncoes": 6,
+          "cruzamentos_sem_conexao": 0,
+          "arestas": 7
+        }
+      ]
+    }
+  },
+  {
+    "arquivo": "CarProg_HC12_publico",
+    "m11": {
+      "fios": [
+        {
+          "cor": "BLUE",
+          "funcao": "Reset signal to MPU",
+          "fonte": "M11"
+        },
+        {
+          "cor": "BROWN",
+          "funcao": "GND (ground)",
+          "fonte": "M11"
+        },
+        {
+          "cor": "GREY",
+          "funcao": "BKGD communication signal",
+          "fonte": "M11"
+        },
+        {
+          "cor": "RED",
+          "funcao": "switched +5V",
+          "fonte": "M11"
+        },
+        {
+          "cor": "VIOLET",
+          "funcao": "switched +12V",
+          "fonte": "M11"
+        }
+      ],
+      "mcus": [
+        {
+          "modelo": "MC68HC912B32",
+          "mascara": null,
+          "fonte": "M11",
+          "mascara_candidata": "4C11W"
+        },
+        {
+          "modelo": "MC68HC912BC32",
+          "mascara": null,
+          "fonte": "M11",
+          "mascara_candidata": "4C11W"
+        },
+        {
+          "modelo": "MC68HC912BD32",
+          "mascara": null,
+          "fonte": "M11",
+          "mascara_candidata": "4C11W"
+        },
+        {
+          "modelo": "MC68HC912D60",
+          "mascara": null,
+          "fonte": "M11",
+          "mascara_candidata": "4C11W"
+        }
+      ],
+      "mascaras": [
+        "4C11W",
+        "9H91F",
+        "J15G",
+        "K29E",
+        "F68K",
+        "4F73K",
+        "0K75F",
+        "0K13J",
+        "L26M"
+      ]
+    }
+  }
+]

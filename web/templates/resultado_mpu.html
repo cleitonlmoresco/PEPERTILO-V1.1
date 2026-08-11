@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}PEPERTILO — MPU PRO{% endblock %}
+{% block content %}
+<section class="secao-resultado">
+  <div class="cabecalho-pagina flex-between">
+    <div><h2>Modo MPU PRO</h2><p class="subtitulo">Identificação documental e pin-map da MCU</p></div>
+    <a href="{{ url_for('modulo8.index') }}" class="btn-secundario">&larr; Novo arquivo</a>
+  </div>
+
+  {% set idm = resultado.identificacao_mpu or {} %}
+  <div class="cards-resumo">
+    <div class="card-status"><h4>MCU</h4><p class="valor">{{ idm.part_number or 'Não identificada' }}</p></div>
+    <div class="card-status"><h4>Encapsulamento</h4><p class="valor">{{ idm.encapsulamento or 'N/C' }}</p></div>
+    <div class="card-status"><h4>Pinagem</h4><p class="valor">{{ idm.status_pinmap or 'N/C' }}</p></div>
+  </div>
+
+  <div class="caixa-destaque">
+    <h3>Regra de identificação</h3>
+    <p><strong>{{ resultado.regra_mpu }}</strong></p>
+    <p>O sistema não usa posição geométrica para inventar números de pino. Coordenadas só são associadas quando a orientação do encapsulamento é evidenciada.</p>
+  </div>
+
+  <div class="painel-tabela">
+    <h3>Identificação</h3>
+    <table class="tabela-dados">
+      <tr><th>Fabricante</th><td>{{ idm.fabricante or '' }}</td></tr>
+      <tr><th>Família</th><td>{{ idm.familia or '' }}</td></tr>
+      <tr><th>Part number</th><td>{{ idm.part_number or '' }}</td></tr>
+      <tr><th>Maskset</th><td>{{ (idm.masksets or [])|join(', ') or 'Não encontrado' }}</td></tr>
+      <tr><th>Interface</th><td>{{ (idm.interfaces or [])|join(', ') }}</td></tr>
+      <tr><th>Fonte</th><td>{{ (idm.fontes or [])|join('; ') }}</td></tr>
+    </table>
+  </div>
+
+  <div class="painel-tabela">
+    <h3>Programadores encontrados na base</h3>
+    {% if resultado.programadores %}
+    <table class="tabela-dados"><thead><tr><th>Programador</th><th>Interface</th><th>Compatibilidade</th><th>Status</th></tr></thead><tbody>
+      {% for p in resultado.programadores %}<tr><td>{{ p.nome }}</td><td>{{ (p.interfaces or [])|join(', ') }}</td><td>{{ p.compatibilidade or '' }}</td><td>{{ p.status }}</td></tr>{% endfor %}
+    </tbody></table>
+    {% else %}<p class="sem-dados">Nenhum programador relacionado na base.</p>{% endif %}
+  </div>
+
+  <div class="painel-tabela">
+    <h3>Pin-map documental</h3>
+    {% if resultado.pinos %}
+    <div class="tabela-container"><table class="tabela-dados"><thead><tr><th>Pino</th><th>Função</th><th>Coordenada</th><th>Origem</th></tr></thead><tbody>
+      {% for p in resultado.pinos %}<tr><td>{{ p.pino }}</td><td>{{ p.funcao }}</td><td>{% if p.coordenada %}{{ p.coordenada.lado }} ({{ '%.1f'|format(p.coordenada.x) }}, {{ '%.1f'|format(p.coordenada.y) }}){% else %}Não mapeada{% endif %}</td><td>{{ p.origem }}</td></tr>{% endfor %}
+    </tbody></table></div>
+    {% else %}<p class="sem-dados">Nenhum pin-map documental disponível.</p>{% endif %}
+  </div>
+</section>
+{% endblock %}

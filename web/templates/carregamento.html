@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processando Documento - PEPERTILO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .loading-container {
+            text-align: center;
+            background: #1e293b;
+            padding: 3rem 4rem;
+            border-radius: 16px;
+            border: 1px solid #475569;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .spinner {
+            border: 8px solid #334155;
+            border-top: 8px solid #3b82f6;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .status-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #94a3b8;
+        }
+        .progresso {
+            margin-top: 15px;
+            width: 100%;
+            background: #334155;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 10px;
+        }
+        .progresso-bar {
+            height: 100%;
+            width: 0%;
+            background: #3b82f6;
+            transition: width 0.5s ease;
+        }
+        .erro {
+            color: #ef4444;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <h2>⏳ Processando seu documento...</h2>
+        <div class="spinner"></div>
+        <div class="status-text" id="etapa">Aguardando início...</div>
+        <div class="progresso">
+            <div class="progresso-bar" id="barraProgresso"></div>
+        </div>
+        <div id="erro" class="erro"></div>
+        <p style="margin-top: 20px; color: #64748b; font-size: 0.9rem;">
+            Isso pode levar alguns segundos, dependendo do tamanho do arquivo.
+        </p>
+    </div>
+
+    <script>
+        const jobId = '{{ job_id }}';
+        let intervalo = null;
+
+        async function verificarStatus() {
+            try {
+                const res = await fetch(`/status/${jobId}`);
+                const data = await res.json();
+
+                if (data.status === 'concluido') {
+                    clearInterval(intervalo);
+                    window.location.href = `/resultado/${jobId}`;
+                } else if (data.status === 'erro') {
+                    clearInterval(intervalo);
+                    document.getElementById('etapa').textContent = '❌ Falha no processamento';
+                    document.getElementById('erro').textContent = 'Erro: ' + (data.erros[0]?.mensagem || 'desconhecido');
+                    document.getElementById('erro').style.display = 'block';
+                } else {
+                    document.getElementById('etapa').textContent = data.etapa || 'Processando...';
+                    document.getElementById('barraProgresso').style.width = (data.progresso || 0) + '%';
+                }
+            } catch (err) {
+                console.error('Erro ao verificar status:', err);
+            }
+        }
+
+        // Inicia o polling a cada 2 segundos
+        intervalo = setInterval(verificarStatus, 2000);
+        verificarStatus(); // chama imediatamente
+    </script>
+</body>
+</html>

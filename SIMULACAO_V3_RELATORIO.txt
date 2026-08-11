@@ -1,0 +1,32 @@
+PEPERTILO BANCADA V3 - RELATORIO DE VALIDACAO
+
+1) TOPOLOGIA CONTROLADA
+- Junção T: reconhecida e conectada.
+- Cruzamento interior/interior sem ponto: permanece sem conexão.
+- Resultado: 1 rede com pinos 1 e 2.
+
+2) IMAGEM ECU DELPHI MT20U
+- M3/M4: OCR + 1108 segmentos.
+- M5: detectou junções e cruzamentos sem conexão.
+- Limitação: OCR ainda não entrega todos os terminais com geometria suficiente para montar redes completas.
+- O sistema NÃO inventa conexões.
+
+3) PINOUT MC68HC912BC32
+- MCU identificada documentalmente.
+- Package: 80-pin QFP.
+- Pin-map: 80 pinos documentais.
+- Programadores relacionados: CarProg A10 (documentado para família HC12/9S12); UPA-USB permanece apenas cadastrado por família.
+- O número do pino NÃO é estimado por posição.
+
+4) CARPROG HC12
+- M11 extraiu 5 fios, 4 MCUs e 9 máscaras do manual público usado na validação.
+- Cores do cabo: BLUE RESET, BROWN GND, GREY BKGD, RED +5V, VIOLET +12V.
+- Essas cores são classificadas como CABO_DO_PROGRAMADOR, não como fio do veículo.
+
+5) DATASHEET M95160
+- Fonte ST oficial consultada.
+- O datasheet confirma EEPROM SPI de 16 Kbit, 2048 x 8, e packages SO8/TSSOP8/UFDFPN8/WLCSP.
+- M6 ainda precisa de evolução para tabelas/estruturas difíceis; a V3 não mascara essa limitação.
+
+6) REGRA DE SEGURANCA TECNICA
+Nenhuma pinagem de cabo, cor ou compatibilidade é promovida a 'confirmada' sem evidência documental específica.

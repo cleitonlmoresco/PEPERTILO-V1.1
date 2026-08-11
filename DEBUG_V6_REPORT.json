@@ -1,0 +1,29 @@
+{
+  "version": "PEPERTILO-BANCADA-V6",
+  "regression_previous": {
+    "pass": 12,
+    "fail": 0
+  },
+  "regression_v6": {
+    "pass": 6,
+    "fail": 0
+  },
+  "total_tests": 18,
+  "status": "PASS",
+  "features": [
+    "ponte_grafica",
+    "continuidade_entre_paginas",
+    "barramentos",
+    "conectores_complexos"
+  ],
+  "real_ecu_test": {
+    "file": "01_ECU_Delphi_MT20U.webp",
+    "m4_connectors": 2,
+    "m4_terminals": 8,
+    "m4_terminals_with_segment": 7,
+    "m5_connections": 0,
+    "m5_nodes": 1599,
+    "m5_edges": 1088,
+    "interpretation": "correct_non_connection_for_connector_layout"
+  }
+}

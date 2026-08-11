@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2>PEPERTILO — Bancada</h2>
+  <p>Registro de serviços, medições e apoio ao diagnóstico.</p>
+  <section>
+    <h3>Novo serviço</h3>
+    <form id="novo-servico">
+      <input name="fabricante" placeholder="Fabricante">
+      <input name="modelo" placeholder="Modelo">
+      <input name="ano" placeholder="Ano">
+      <input name="modulo" placeholder="Módulo">
+      <input name="part_number" placeholder="Part number">
+      <input name="sintoma" placeholder="Sintoma" style="width: 100%;">
+      <button type="submit">Abrir serviço</button>
+    </form>
+  </section>
+  <section>
+    <h3>Serviços recentes</h3>
+    <table>
+      <thead><tr><th>ID</th><th>Fabricante</th><th>Módulo</th><th>Part number</th><th>Sintoma</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for s in servicos %}
+        <tr><td>{{s.id}}</td><td>{{s.fabricante or ''}}</td><td>{{s.modulo or ''}}</td><td>{{s.part_number or ''}}</td><td>{{s.sintoma or ''}}</td><td>{{s.status}}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h3>Programadores cadastrados</h3>
+    <div id="programadores"></div>
+  </section>
+</div>
+<script>
+document.getElementById('novo-servico').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  const r = await fetch('/api/bancada/servico', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)});
+  const j = await r.json();
+  if (j.id) location.reload(); else alert(j.erro || 'Erro ao criar serviço');
+});
+(async () => {
+  const r=await fetch('/api/programadores'); const j=await r.json();
+  document.getElementById('programadores').innerHTML = (j.programadores||[]).map(p =>
+    `<div><strong>${p.id}</strong> — ${p.nome} — ${p.interfaces.join(', ')} — ${p.status}</div>`
+  ).join('');
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+[
+  {
+    "arquivo": "deteccao_simbolos.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "grafo_rastreador.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "topologia.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "modo_mpu.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "extracao_vetorial.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "extracao_datasheet.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "extracao_carprog.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "roteador.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "core/modelos.py",
+    "status": "AST_OK"
+  },
+  {
+    "arquivo": "web/app.py",
+    "status": "AST_OK"
+  }
+]

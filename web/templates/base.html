@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PEPERTILO Bancada V2 - Sistema de Análise{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="cabecalho-site">
+        <nav class="navbar container">
+            <div class="logo">
+                <a href="{{ url_for('modulo8.index') }}">
+                    <h1>PEPERTILO <span>BENCH V2</span></h1>
+                </a>
+            </div>
+            <ul class="menu-navegacao">
+                <li><a href="{{ url_for('modulo8.index') }}">Início (Upload)</a></li>
+                <li><a href="{{ url_for('modulo8.busca') }}">Buscar Projetos</a></li>
+                <li><a href="/bancada">Bancada</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="conteudo-principal container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alertas-container">
+                    {% for category, message in messages %}
+                        <div class="alerta alerta-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="rodape-site">
+        <div class="container">
+            <p>&copy; 2026 PEPERTILO - Sistema Integrado de Leitura e Restauração.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
