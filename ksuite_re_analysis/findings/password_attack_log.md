@@ -1,5 +1,18 @@
 # Log do ataque à senha dos `.ori`
 
+## ✅ RESOLVIDO (via engenharia reversa, não força bruta)
+
+```
+Senha: -%7B5-FA45+48DA7+72F5-8E9C5%4F5A68%+
+```
+
+Aberta em **312/312 ZIPs**. A senha é **decifrada em runtime** por XOR na função
+RVA `0x0000A160`. Detalhes completos em `password_discovery.md`.
+
+> As tabelas abaixo ficam como registro histórico das tentativas que falharam.
+
+---
+
 ## Alvo
 
 `res\ori\<protocolo>\<CODIGO>.zip` → contém 1 arquivo `.ori`, **ZipCrypto + deflate**.
