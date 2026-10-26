@@ -52,6 +52,24 @@ Variáveis de ambiente:
 | `FLASK_PORT` | `5000` | Porta HTTP |
 | `FLASK_DEBUG` | `false` | Ativa o modo debug do Flask |
 
+## Desenvolvimento
+
+- `requirements.txt`: runtime completo (inclui o OCR opcional com Paddle).
+- `requirements-ci.txt`: dependências leves usadas no CI, sem Paddle/Tesseract.
+- `requirements-dev.txt`: runtime + Ruff.
+- Lint: `ruff check .`
+- Testes: `python -m unittest discover -s tests -v`
+
+O código usa `import pymupdf as fitz` (PyMuPDF >= 1.24). O alias `fitz` é mantido
+para preservar a API usada pelo projeto; o nome antigo do módulo está depreciado
+no PyMuPDF 2.x.
+
+Nunca versione `.env`, chaves ou PDFs de clientes. Em produção, defina
+`SECRET_KEY` forte e mantenha `FLASK_DEBUG` desligado.
+
+O workflow de CI pronto está em `ci/github-actions.yml`. Para ativá-lo, copie
+para `.github/workflows/ci.yml`; o token do GitHub precisa do escopo `workflow`.
+
 ## Testes
 
 ```powershell

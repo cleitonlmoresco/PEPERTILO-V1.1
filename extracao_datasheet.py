@@ -229,7 +229,7 @@ def _dedupe_records(records):
 def _extrair_com_ocr(caminho_pdf, limite_paginas=0):
     """OCR estruturado: Paddle quando disponível; fallback Tesseract posicional."""
     try:
-        import fitz
+        import pymupdf as fitz
         doc = fitz.open(caminho_pdf)
     except Exception as e:
         raise ErroOCR(f'Não foi possível abrir PDF: {e}', causa=e)
