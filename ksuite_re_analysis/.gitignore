@@ -1,0 +1,5 @@
+# artefatos gerados
+selftest_enc.zip
+*.pyc
+__pycache__/
+ori_decifrados/
