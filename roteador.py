@@ -296,10 +296,10 @@ def processar_pdf_rasterizado(caminho_pdf, limite_paginas=0):
 # DEMAIS FUNÇÕES (sem alterações)
 # ============================================================
 
-def processar_pdf_vetorial(caminho):
+def processar_pdf_vetorial(caminho, limite_paginas=0):
     logger.info(f"Processando PDF vetorial: {caminho}", extra={'modulo': 'Roteador'})
     try:
-        dados = extrair_primitivas_vetorial(caminho)
+        dados = extrair_primitivas_vetorial(caminho, limite_paginas)
         if not dados:
             return {'status': 'erro', 'mensagem': 'Nenhum dado extraído do PDF.'}
         dados = to_native(dados)
@@ -318,7 +318,7 @@ def processar_pdf_vetorial(caminho):
             'conectores': to_native(perifs.get('conectores', [])) if isinstance(perifs, dict) else [],
             'topologia': to_native(perifs.get('topologia', [])) if isinstance(perifs, dict) else []
         }
-        integracao = integrar_m5_m6_pdf(caminho, resultado, 0)
+        integracao = integrar_m5_m6_pdf(caminho, resultado, limite_paginas)
         if integracao:
             resultado['integracao_m5_m6'] = to_native(integracao)
             resultado['ficha_bancada'] = to_native(
@@ -395,7 +395,7 @@ def rotear_arquivo(caminho_arquivo, limite_paginas=0):
     logger.info(f"Arquivo classificado como: {tipo} ({descricao})", extra={'modulo': 'Roteador'})
 
     funcao = ROTAS.get(tipo, processar_desconhecido)
-    if tipo in ('pdf_rasterizado', 'manual'):
+    if tipo in ('pdf_rasterizado', 'pdf_vetorial', 'manual'):
         resultado = funcao(caminho_arquivo, limite_paginas)
     else:
         resultado = funcao(caminho_arquivo)
