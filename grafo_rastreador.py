@@ -17,7 +17,8 @@ from logger_erros import logger, monitorar, ErroGrafo, Severidade, ColetorErros
 from topologia import reconstruir_topologia
 
 CONFIG={'dist_max_pino_segmento':45.0,'dist_max_periferico_segmento':35.0,'dist_texto':18.0,'dist_emenda':5.0}
-RE_PIN=re.compile(r'^[\[\(\{]?\s*(?:PIN\s*)?(\d{1,4})\s*[\]\)\}]?$',re.I)
+RE_PIN=re.compile(r'^[\[\(\{]?\s*(?:(?:PIN|PINO)\s*)?([A-Z]{1,2}\d{1,4}|\d{1,4})\s*[\]\)\}]?$',re.I)
+RE_PIN_DESC=re.compile(r'^[\[\(\{]?\s*(?:PIN|PINO)\s*([A-Z]{1,2}\d{1,4}|\d{1,4})\s*[-:]\s*([A-Z0-9_./+ -]{2,40})\s*[\]\)\}]?$',re.I)
 RE_CONT=re.compile(r'(?:P[ÁA]G(?:INA)?|FOLHA|SHEET|PAGE|P[.]?)\s*([0-9]+)',re.I)
 RE_NET_LABEL=re.compile(r'^(?:NET|REDE|SINAL|CONT|CONTINUIDADE)\s*[:=]\s*([A-Z0-9_./-]{2,40})$', re.I)
 
@@ -38,7 +39,13 @@ def _pinos_textuais(textos):
     out=[]
     for t in textos:
         s=str(t.get('texto','')).strip().upper(); m=RE_PIN.fullmatch(s)
-        if m: out.append({'numero':int(m.group(1)),'x':float(t.get('x',0)),'y':float(t.get('y',0)),'evidencia':'OCR'})
+        if m:
+            out.append({'numero':m.group(1).upper(),'x':float(t.get('x',0)),'y':float(t.get('y',0)),'evidencia':'OCR'})
+            continue
+        m=RE_PIN_DESC.fullmatch(s)
+        if m:
+            out.append({'numero':m.group(1).upper(),'x':float(t.get('x',0)),'y':float(t.get('y',0)),
+                        'descricao':m.group(2).strip().upper(),'evidencia':'OCR'})
     return out
 
 def extrair_pinos_ecu(textos, ecu, conectores=None, linhas=None):
@@ -226,7 +233,7 @@ def _attach_text_pins(G,segs,pins):
     for p in pins:
         if p.get('conector'):
             continue
-        key=(int(p['numero']),round(float(p['x'])/3),round(float(p['y'])/3))
+        key=(str(p['numero']).upper(),round(float(p['x'])/3),round(float(p['y'])/3))
         if key in vistos:
             continue
         vistos.add(key)
@@ -243,7 +250,7 @@ def _attach_perifericos(G,segs,textos):
           'GREEN/WHITE','RED/WHITE','BLACK/WHITE'}
     for t in textos:
         s=str(t.get('texto','')).strip();u=s.upper()
-        if len(s)<3 or u in stop or RE_PIN.fullmatch(s):continue
+        if len(s)<3 or u in stop or u.startswith('ECU') or RE_PIN.fullmatch(s) or RE_PIN_DESC.fullmatch(s):continue
         if re.fullmatch(r'\d+(?:[.,]\d+)?\s*MM(?:²|2)?', u):continue
         if not any(ch.isalpha() for ch in s):continue
         node=_attach_nearest(G,f'PER:{s}',(float(t.get('x',0)),float(t.get('y',0))),segs,40,'periferico',{'rotulo':s})
@@ -463,7 +470,21 @@ def processar_diagrama_multipagina(dados_paginas):
             pins=extrair_pinos_ecu(dados.get('textos',[]),None,conns,dados.get('linhas',[]))
             attached=_attach_connectors(G,segs,conns)
             attached+=_attach_text_pins(G,segs,pins)
-            perifs=_attach_perifericos(G,segs,dados.get('textos',[]))
+            # Rótulos compostos ("PINO 20 - INJ1") trazem a função do pino no
+            # próprio texto. A descrição é anexada como periférico no mesmo
+            # ponto do fio para que a conexão pino→função seja registrada.
+            textos_perif=list(dados.get('textos',[]) or [])
+            vistos_desc=set()
+            for p in pins:
+                desc=p.get('descricao')
+                if not desc:
+                    continue
+                chave=(desc.upper(),round(float(p['x'])/3),round(float(p['y'])/3))
+                if chave in vistos_desc:
+                    continue
+                vistos_desc.add(chave)
+                textos_perif.append({'texto':desc,'x':p['x'],'y':p['y']})
+            perifs=_attach_perifericos(G,segs,textos_perif)
             dados['_terminais_fio_m5']=[
                 {
                     'conector_id': c.get('id'),
@@ -502,6 +523,11 @@ def processar_diagrama_multipagina(dados_paginas):
     # Redes elétricas da página: principal saída para diagramas sem nomes periféricos.
     for pag,dados in dados_paginas.items():
         for c in dados.get('_conexoes_rede_m5',[]):
+            # Redes com periférico identificado já são detalhadas pino a pino
+            # pelo rastreamento topológico abaixo. Mantê-las aqui duplicaria
+            # a mesma conexão no resultado final.
+            if c.get('funcao'):
+                continue
             conexoes.append(c)
         for rec in (dados.get('_net_labels_m5',[]) or []):
             rr=dict(rec)
@@ -541,15 +567,26 @@ def processar_diagrama_multipagina(dados_paginas):
         )]
     conexoes.extend(barramentos)
     for key,start in list(pin_nodes.items()):
-        if start not in GG:continue
-        alvo=None; fila=deque([start]);vis={start}
+        if ':' not in key:
+            continue
+        pag_txt=key.split(':',1)[0]
+        try:
+            pag=int(pag_txt)
+        except ValueError:
+            continue
+        # O grafo global prefixa os nós com p{página}:repr(nó). O pin_nodes
+        # guarda o nó local; sem remapear, o BFS nunca encontra o ponto de
+        # partida e nenhuma conexão pino→periférico é produzida.
+        start_global=f'p{pag}:{repr(start)}'
+        if start_global not in GG:continue
+        alvo=None; fila=deque([start_global]);vis={start_global}
         while fila and alvo is None:
             n=fila.popleft()
             if GG.nodes[n].get('tipo')=='periferico':alvo=GG.nodes[n].get('rotulo');dest=n;break
             for v in GG.neighbors(n):
                 if v not in vis:vis.add(v);fila.append(v)
         if alvo:
-            pag=int(key.split(':',1)[0]); pino=key.split(':',1)[1].replace('PIN:','')
+            pino=key.split(':',1)[1].replace('PIN:','')
             conexoes.append({'pino':pino,'destino':alvo,'cor':'','bitola':'','pagina_origem':[pag],'status':'rastreada_topologicamente'})
     logger.info(f'Processamento concluído: {len(conexoes)} conexões, {sum(len(g) for g in grafos.values())} nós, {len(conectores_total)} conectores em {len(grafos)} páginas',extra={'modulo':'M5'})
     return conexoes,GG,pin_nodes,{'conectores':conectores_total,'topologia':topo_stats,
