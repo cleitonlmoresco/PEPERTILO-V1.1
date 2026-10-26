@@ -41,6 +41,7 @@ imagem limpa, foto de celular ou manual/datasheet.
 ## Interface web
 
 ```powershell
+$env:SECRET_KEY = "uma-chave-local-forte"
 ..\.venv-pepertilo\Scripts\python.exe web\app.py
 ```
 
@@ -48,6 +49,7 @@ Variáveis de ambiente:
 
 | Variável | Padrão | Descrição |
 | --- | --- | --- |
+| `SECRET_KEY` | — (obrigatória) | Chave de sessão do Flask; o servidor não inicia sem ela |
 | `FLASK_HOST` | `0.0.0.0` | Endereço de escuta |
 | `FLASK_PORT` | `5000` | Porta HTTP |
 | `FLASK_DEBUG` | `false` | Ativa o modo debug do Flask |
